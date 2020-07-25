@@ -7,6 +7,7 @@ import translations from '@shopify/polaris/locales/en.json';
 import Cookies from 'js-cookie';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
+import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
 
 // const dotenv = require('dotenv');
 // const { SHOPIFY_API_KEY } = process.env;
@@ -19,9 +20,7 @@ const client = new ApolloClient({
 
 class MyApp extends App {
     render() {
-
-        console.log("this test", this);
-
+        
         const { Component, pageProps } = this.props;
         const config = {apiKey: API_KEY, shopOrigin: Cookies.get('shopOrigin'), forceRedirect: true};
 
@@ -34,7 +33,9 @@ class MyApp extends App {
                 <Provider config={config}>
                     <AppProvider i18n={translations}>
                         <ApolloProvider client={client}>
+                        <ApolloHooksProvider client={client}>
                             <Component {...pageProps} />
+                        </ApolloHooksProvider>
                         </ApolloProvider>
                     </AppProvider>
                 </Provider>

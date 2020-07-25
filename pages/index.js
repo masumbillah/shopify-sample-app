@@ -16,10 +16,8 @@ function Index(){
         const productIds = selection.map(product=> { return product.id });
         setModal({open: false});
         store.set("ids", productIds);
-
-        console.log("productIds", productIds);
     };
-
+    
     return (
         <Page>
                  <ResourcePicker
