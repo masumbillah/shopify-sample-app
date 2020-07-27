@@ -18,24 +18,37 @@ const handle = app.getRequestHandler();
 
 const { SHOPIFY_API_SECRET_KEY, SHOPIFY_API_KEY } = process.env;
 
-app.prepare().then(() => {
-    
-  const server = new Koa();
-  const router = new koaRouter();
+const server = new Koa();
+const router = new koaRouter();
 
-  var products = [];
+var products = [
+  {
+    "name": "product 1",
+    "images1": "Image1"
+  },
+  {
+    "name": "product 2",
+    "images1": "Image1"
+  }
+];
 
-  //Router 
-  router.get('/api/products', async (ctx) => {
-    try {
-      ctx.body = {
-        status: 'success',
-        data: products
-      }
-    } catch (error) {
-      console.log("Product fetch error: ", error);
+//Router 
+router.get('/api/products', async (ctx) => {
+  try {
+    ctx.body = {
+      status: 'success',
+      data: products
     }
-  })
+  } catch (error) {
+    console.log("Product fetch error: ", error);
+  }
+});
+
+  //Router midleware
+  server.use(router.allowedMethods());
+  server.use(router.routes());
+
+app.prepare().then(() => {
 
   server.use(session(server));
   server.keys = [SHOPIFY_API_SECRET_KEY];
@@ -64,10 +77,6 @@ app.prepare().then(() => {
 
   server.use( graphQLProxy({version: ApiVersion.April20}) );
   server.use(verifyRequest());
-
-  //Router midleware
-  server.use(router.allowedMethods());
-  server.use(router.routes());
 
   server.use(async (ctx) => {
     await handle(ctx.req, ctx.res);

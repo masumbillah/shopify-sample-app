@@ -56,10 +56,9 @@ const makeApp = products => {
 }
 
 
-fetch('https://59a740b3a008.ngrok.io/api/products?shop=themebins-sample-app-store.myshopify.com')
+fetch('https://cors-anywhere.herokuapp.com/https://6e6ed8aab969.ngrok.io/api/products?shop=themebins-sample-app-store.myshopify.com', {})
     .then(res => res.json())
     .then(data => {
         makeApp(data.data)
-        console.log(data)
     })
     .catch(error => console.log(error))
