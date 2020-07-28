@@ -2,6 +2,7 @@ require('isomorphic-fetch');
 const dotenv = require('dotenv');
 const Koa = require('koa');
 const koaRouter = require("koa-router");
+const koaBody = require('koa-body');
 const next = require('next');
 const { default: createShopifyAuth } = require('@shopify/koa-shopify-auth');
 const { verifyRequest } = require('@shopify/koa-shopify-auth');
@@ -39,6 +40,17 @@ router.get('/api/products', async (ctx) => {
       status: 'success',
       data: products
     }
+  } catch (error) {
+    console.log("Product fetch error: ", error);
+  }
+});
+
+router.post('/api/products', koaBody(), async (ctx) => {
+  try {
+   const bodyData = ctx.request.body;
+
+   products.push(bodyData);
+
   } catch (error) {
     console.log("Product fetch error: ", error);
   }
